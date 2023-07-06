@@ -1,2 +1,39 @@
-# banda_nda
-combine and score NDA release of BANDA demo, behavioral, and cognitive data (human connectome project for depression and anxiety in adolescence)
+# BANDA NDA data scoring repository
+This repository contains scripts to combine and score behavioral data from the `BANDAImgManifestBeh` NDA package for the [BANDA project](https://nda.nih.gov/edit_collection.html?id=3037) (Boston Adolescent Neuroimaging of Depression and Anxiety), sometimes referred to as Human Connectome Project Related to Disease (HCP) or HCP for Anxiety and Depression in Adolescence.
+
+## Scripts info
+- inputs: `BANDAImgManifestBeh/*txt` files include demographic, behavioral, and cognitive data. Most of these data are item-level/raw, but some already aggregated (e.g., PEN and NIHToolbox). These data need to be downloaded directly from NDA
+- `combine_score_banda_nda_behave_data.ipynb` is a wrapper script
+  - loads all .txt files
+  - combines them (by id, respondent, timepoint etc)
+  - cleans dataframe (e.g. from missing values and empty columns)      
+  - calls in `myfx_scoring.py` to generate subscales and total scores of included questionnaires
+  - (optional) removes item-level info, calculates number of NANs, calculates number of theoretical items (for each subject for each subscale) 
+- `myfx_scoring.py` list of functions used to score questionnaires
+  - grabs item-level columns
+  - generates subscales
+  - removes item-level cols
+- output: one dataframe with scored data from all files (or custom set) included in the `BANDAImgManifestBeh` datapackage
+
+## Questionnaires supported 
+- bisbas
+- cbcl (scoring info is proprietary so not including here)
+- cssrs
+- ksads01 (technically not a scoring, here just creating grouping based on specific aims of our study)
+- ksadsp201 (technically not a scoring, currently dropping this info)
+- masq
+- mfq
+- nffi
+- rcads
+- rbqa
+- rmbi
+- shaps
+- stai
+- strain (scoring info is proprietary so not including here)
+- wasi
+- PENN and NIH tasks (not scoring, just relabelling columns)
+
+## More dataset info
+[BANDA project](https://nda.nih.gov/edit_collection.html?id=3037)\
+[BANDA NDA release manual](https://www.humanconnectome.org/storage/app/media/documentation/BANDA1.0/BANDA_Release_1.0_Manual.pdf)\
+[BANDA crosswalk file](https://www.humanconnectome.org/storage/app/media/documentation/BANDA1.0/BANDA1.0_Crosswalk.csv)
