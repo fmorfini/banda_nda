@@ -35,5 +35,7 @@ This repository contains scripts to combine and score behavioral data from the `
 
 ## More dataset info
 [BANDA project](https://nda.nih.gov/edit_collection.html?id=3037)\
+[BANDA NDA download instructions]( https://www.humanconnectome.org/study/connectomes-related-anxiety-depression/data-releases
+)\
 [BANDA NDA release manual](https://www.humanconnectome.org/storage/app/media/documentation/BANDA1.0/BANDA_Release_1.0_Manual.pdf)\
 [BANDA crosswalk file](https://www.humanconnectome.org/storage/app/media/documentation/BANDA1.0/BANDA1.0_Crosswalk.csv)
