@@ -1066,7 +1066,7 @@ def score_tanner(df, item_level, grab_item_count):
     # subscalename = [['subscalename', ['items numbers'], ['placeholder for cols corresponding to items'], 'n items in subscale', 'min score' (added later), 'max score' (added later)]]
     tot = ['tot', cols_items, [], n_items, [], []]
    
-    subscales = [tot]
+    subscales = [tot] #keep for consistency
     
     # scoring and reality checks
     for scale in subscales:
