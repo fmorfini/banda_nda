@@ -1033,8 +1033,7 @@ def score_tanner(df, item_level, grab_item_count):
     '''
     questionnaire: Tanner Staging Sexual Maturity Scale
     respondent: child
-    2 subscales and 1 total score
-    subscales:  can be split into subjective questions and development stages (picture questions, this is traditional Tanner scale)
+    1 total score
     total: sum of all items
     fillers items: none
     reverse scored items: none
@@ -1043,8 +1042,8 @@ def score_tanner(df, item_level, grab_item_count):
     A similar version can be found online here 1-s2.0-S0022347617304626-ympd9106-fig-0001.jpg but does not contain 3 subjective questions. 
     Info on Tanner stages here: https://www.ncbi.nlm.nih.gov/books/NBK544322/figure/article-20323.image.f1/?report=objectonly
     NDA data dictionary: https://nda.nih.gov/data_structure.html?short_name=tanner_sms01
-    NDA & original questionnaire values: dependent on question, see NDA link above. NDA and questionnaire values match. Higher values means higher pubertal stage (i.e more development/more adult like)
-    scores interpretation: higher score indicates higher level of pubertal development
+    NDA & original questionnaire values: dependent on question, see NDA link above. NDA and questionnaire values match. 
+    scores interpretation: higher values means higher pubertal stage (i.e more development/more adult like)
     '''
 
     # questionnaire info
@@ -1065,32 +1064,30 @@ def score_tanner(df, item_level, grab_item_count):
     
     # subscales info
     # subscalename = [['subscalename', ['items numbers'], ['placeholder for cols corresponding to items'], 'n items in subscale', 'min score' (added later), 'max score' (added later)]]
-    subscale_1 = ['subjective', ['tsf1', 'tsf2', 'tsf3'], [], 3, [], []] 
-    subscale_2 = ['stages', ['tsftsg', 'tsftphg'], [], 2, [], []]
     tot = ['tot', cols_items, [], n_items, [], []]
    
-    subscales = [subscale_1, subscale_2, tot]
+    subscales = [tot]
     
     # scoring and reality checks
     for scale in subscales:
-        scale[4] = scale[3] * 1  # add min
-        scale[5] = scale[3] * 5  # add max
+        scale[4] = 1  # add min
+        scale[5] = 5  # add max
         scale[2] = scale[1]  # keep for consistency with other functions, but here no need since column names were hardcoded
         df[f'{name}_{scale[0]}_nan_count'] = df[scale[2]].isna().sum(axis=1) # count and store number of item-level nan answers
         if grab_item_count == 'yes': 
             df[f'{name}_{scale[0]}_items_count'] = len(scale[2]) # store theoretical count of items making up the subscale
-        df[f'{name}_{scale[0]}'] = df[scale[2]].sum(axis=1, min_count = 1) # score subscale
+        df[f'{name}_{scale[0]}'] = df[scale[2]].mean(axis=1, skipna = True ) # score subscale
     
         # calculating min/max i) subscale value and ii) the min/max possible score they would have gotten if they had answered the quesionts they had as nans
-        scale_min = (df[f'{name}_{scale[0]}'] + ( df[f'{name}_{scale[0]}_nan_count'] * 1 )).min()
-        scale_max = (df[f'{name}_{scale[0]}'] + ( df[f'{name}_{scale[0]}_nan_count'] * 5 )).max()
+        scale_min = df[f'{name}_{scale[0]}'].min()
+        scale_max = df[f'{name}_{scale[0]}'].max()
 
         #scale[4] and scale[5] indicate the theoretical ranges; scale_min|_max are actual min and max of data     
         assert (scale_min >= scale[4]) and (scale_max <= scale[5]), f'Watch out: values for subscale {name}_{scale[0]} are outside of theoretical range for some participants. values should be between {scale[4]} and {scale[5]} but are between {scale_min} and {scale_max} instead'
 
         # check that overall number of items grabbed is correct
         n_items_used = [scale[3] for scale in subscales]
-        assert sum(n_items_used) == 2*n_items - len(fillers_items), 'The number of items used to calculate the subscales and total score is either more or less than what was expected' #note: doing 2* because subscales includes the total subscale too, which here corresponds to the sum of all items    
+        assert sum(n_items_used) == n_items - len(fillers_items), 'The number of items used to calculate the subscales and total score is either more or less than what was expected' #note: doing 2* because subscales includes the total subscale too, which here corresponds to the sum of all items    
 
     # remove item-level columns from original df
     if item_level == 'drop':
