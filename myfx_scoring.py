@@ -27,6 +27,7 @@
 # this file includes one function to score each of the following:
 # bisbas
 # cbcl (scoring info is proprietary so not including here)
+# chapman handedness
 # cssrs
 # ksads01 (technically not a scoring, here just creating grouping based on specific aims of our study)
 # ksadsp201 (technically not a scoring, currently dropping this info)
@@ -39,6 +40,7 @@
 # shaps
 # stai
 # strain (scoring info is proprietary so not including here)
+# tanner
 # wasi
 # PENN and NIH tasks (not scoring, just relabelling columns)
 
