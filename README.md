@@ -44,11 +44,11 @@ This repository contains scripts to combine and score behavioral data from the `
 
 ## Papers 
 ### Protocols and Data Release Papers
-Hubbard et al. (2020) NeuroImage Clinical: https://doi.org/10.1016/j.nicl.2020.102240
-Siless et al. (2020) NeuroImage Clinical: https://doi.org/10.1016/j.nicl.2020.102242
+Hubbard et al. (2020) NeuroImage Clinical: https://doi.org/10.1016/j.nicl.2020.102240 \
+Siless et al. (2020) NeuroImage Clinical: https://doi.org/10.1016/j.nicl.2020.102242 
 
 ### Others using BANDA data
-Hubbard et al., (2023) Clinical Psychological Science :https://doi.org/10.1177/21677026221079628
-Auerbach et al., (2022) JAACAP: https://doi.org/10.1016/j.jaac.2021.04.014
-Lee et al., (2021) The Cerebellum: https://doi.org/10.1007/s12311-020-01213-8 
-Tozzi et al., (2021) NeuroImage: https://doi.org/10.1016/j.neuroimage.2021.118694 
+Hubbard et al., (2023) Clinical Psychological Science :https://doi.org/10.1177/21677026221079628 \
+Auerbach et al., (2022) JAACAP: https://doi.org/10.1016/j.jaac.2021.04.014 \
+Lee et al., (2021) The Cerebellum: https://doi.org/10.1007/s12311-020-01213-8 \
+Tozzi et al., (2021) NeuroImage: https://doi.org/10.1016/j.neuroimage.2021.118694
