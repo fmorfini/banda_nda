@@ -18,18 +18,20 @@ This repository contains scripts to combine and score behavioral data from the `
 ## Questionnaires supported 
 - bisbas
 - cbcl (scoring info is proprietary so not including here)
+- chapman handedness
 - cssrs
 - ksads01 (technically not a scoring, here just creating grouping based on specific aims of our study)
 - ksadsp201 (technically not a scoring, currently dropping this info)
 - masq
 - mfq
 - nffi
-- rcads
 - rbqa
+- rcads
 - rmbi
 - shaps
 - stai
 - strain (scoring info is proprietary so not including here)
+- tanner
 - wasi
 - PENN and NIH tasks (not scoring, just relabelling columns)
 
@@ -39,3 +41,14 @@ This repository contains scripts to combine and score behavioral data from the `
 )\
 [BANDA NDA release manual](https://www.humanconnectome.org/storage/app/media/documentation/BANDA1.0/BANDA_Release_1.0_Manual.pdf)\
 [BANDA crosswalk file](https://www.humanconnectome.org/storage/app/media/documentation/BANDA1.0/BANDA1.0_Crosswalk.csv)
+
+## Papers 
+### Protocols and Data Release Papers
+Hubbard et al. (2020) NeuroImage Clinical: https://doi.org/10.1016/j.nicl.2020.102240
+Siless et al. (2020) NeuroImage Clinical: https://doi.org/10.1016/j.nicl.2020.102242
+
+### Others using BANDA data
+Hubbard et al., (2023) Clinical Psychological Science :https://doi.org/10.1177/21677026221079628
+Auerbach et al., (2022) JAACAP: https://doi.org/10.1016/j.jaac.2021.04.014
+Lee et al., (2021) The Cerebellum: https://doi.org/10.1007/s12311-020-01213-8 
+Tozzi et al., (2021) NeuroImage: https://doi.org/10.1016/j.neuroimage.2021.118694 
