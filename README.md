@@ -29,7 +29,7 @@ This repository contains scripts to combine and score behavioral data from the `
 - rcads
 - rmbi
 - shaps
-- stai
+- stai (work in progress)
 - strain (scoring info is proprietary so not including here)
 - tanner
 - wasi
