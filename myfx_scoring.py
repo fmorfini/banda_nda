@@ -903,7 +903,7 @@ def score_shaps(df, item_level, grab_item_count):
     n_items = 14
     reverse_items = []
     fillers_items = []
-    rules = {1 : 1, 2 : 1, 3 : 0, 4 : 0, 'NaN': np.nan, 999: np.nan}
+    rules = {1 : 1, 2 : 1, 3 : 0, 4 : 0, 'NaN': np.nan, 999: np.nan, -9: np.nan}
 
     # undoing the customizing of column names (for consistency with NDA)
     df.columns = df.columns.str.replace(f'{filename}_','') #had previously appended filename_ to each variable coming from a file, here removing 
@@ -956,7 +956,8 @@ def score_stai(df, item_level, grab_item_count):
     subscales: state anxiety, trait anxiety
     total: none
     fillers items: none
-    reverse scored items: [1, 2, 5, 8, 10, 11, 15, 16, 19, 20, 21, 23, 26, 27, 30, 33, 34, 36, 39]
+    reverse scored items parent: [1, 2, 5, 8, 10, 11, 15, 16, 19, 20, 21, 23, 26, 27, 30, 33, 34, 36, 39]
+    reverse scored items child : [1, 2, 5, 8, 10, 11, 15, 16, 19, 20, 21,     26, 27, 30, 33,     36, 39]
     notes from BANDA1.0_crosswalk.csv: none
     questionnaire & scoring: https://oml.eular.org/sysModules/obxOML/docs/id_150/State-Trait-Anxiety-Inventory.pdf
     NDA data dictionary: https://nda.nih.gov/data_structure.html?short_name=stai01
@@ -971,9 +972,13 @@ def score_stai(df, item_level, grab_item_count):
     name = 'stai'
     filename =f'{name}01'
     n_items = 40
-    # reverse_items = [1, 2, 5, 8, 10, 11, 15, 16, 19, 20, 21, 23, 26, 27, 30, 33, 34, 36, 39]
-    reverse_items = ['stai1', 'stai2','stai5','stai_state8_i','stai10', 'stai11', 'stai15', 'stai16', 'stai_state19_i', 'stai20', 'stai21',
+
+    reverse_items_parent = ['stai1', 'stai2','stai5','stai_state8_i','stai10', 'stai11', 'stai15', 'stai16', 'stai_state19_i', 'stai20', 'stai21',
                     'stai_trait3_i','stai26', 'stai27', 'stai30','stai33', 'stai_trait14_i','stai36','stai39' ]
+
+    reverse_items_child = ['stai1', 'stai2','stai5','stai_state8_i','stai10', 'stai11', 'stai15', 'stai16', 'stai_state19_i', 'stai20', 'stai21',
+                    'stai26', 'stai27', 'stai30','stai33','stai36','stai39' ]
+    
     fillers_items = [ ]
     rules = {1 : 1, 2 : 2, 3 : 3, 4 : 4, 'NaN': np.nan}
 
@@ -983,10 +988,17 @@ def score_stai(df, item_level, grab_item_count):
     cols_items = df.columns[df.columns.str.contains(f'{name}')]  # returns list of column names
     df[cols_items] = df[cols_items].replace(rules) # re-codes 
 
-    # reverse scoring
-    for grab_col in reverse_items:
-        df[grab_col] = max(rules.values()) + 1 - df[grab_col] # 4 = max value of each item, 1 = constant, then subtracting from original un-reverted scores  
-    
+    # reverse scoring parent
+    for grab_col in reverse_items_parent:
+        df.loc[df.index.get_level_values("respondent").isin(["Parent"]), grab_col]  = max(rules.values()) + 1 - df.loc[df.index.get_level_values("respondent").isin(["Parent"])] # 4 = max value of each item, 1 = constant, then subtracting from original un-reverted 
+        # df[grab_col] = max(rules.values()) + 1 - df[grab_col] # 4 = max value of each item, 1 = constant, then subtracting from original un-reverted scores  
+
+    # reverse scoring child
+    for grab_col in reverse_items_child:
+        df.loc[df.index.get_level_values("respondent").isin(["Child"]), grab_col]  = max(rules.values()) + 1 - df.loc[df.index.get_level_values("respondent").isin(["Child"])] # 4 = max value of each item, 1 = constant, then subtracting from original un-reverted 
+        # df[grab_col] = max(rules.values()) + 1 - df[grab_col] # 4 = max value of each item, 1 = constant, then subtracting from original un-reverted scores  
+          
+        
     # subscales info
     # subscalename = [['subscalename', ['items numbers'], ['placeholder for cols corresponding to items'], 'n items in subscale', 'min score' (added later), 'max score' (added later)]]
     subscale_1 = ['state', ['stai1', 'stai2', 'stai3', 'stai_state4_i','stai5', 'stai6', 'stai7','stai_state8_i',
