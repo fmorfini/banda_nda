@@ -38,7 +38,7 @@
 # rcads
 # rmbi
 # shaps
-# stai
+# stai (work in progress)
 # strain (scoring info is proprietary so not including here)
 # tanner
 # wasi
@@ -820,7 +820,7 @@ def score_rmbi(df, item_level, grab_item_count):
     questionnaire: similar version: https://scholarship.shu.edu/cgi/viewcontent.cgi?referer=&httpsredir=1&article=1239&context=theses#page=47
     scoring: https://www.sciencedirect.com/science/article/pii/S0165178105001022
     NDA data dictionary: https://nda.nih.gov/data_structure.html?short_name=rmbi01
-    NDA data scoring: 0 = no/hardly ever; 1 = some of the time; 2 = yes/most of the time; 3 = do not remember at all;
+    NDA data scoring: 0 = no/hardly ever; 1 = some of the time; 2 = yes/most of the time; 3 = do not remember at all; #this vary based on specific items (see items_a and items_b)
     original questionnaire scoring: 0 = “no/hardly ever”; 1 = “some of the time”, or 2 = “yes/most of the time”
     scores interpretation: higher score indicates higher level of behavior problem of subscale
     '''
@@ -831,23 +831,32 @@ def score_rmbi(df, item_level, grab_item_count):
     n_items = 18
     reverse_items = []
     fillers_items = []
-    rules = {0 : 0, 1 : 1, 2 : 2, 3 : 0, 'NaN': np.nan}
+    
+    items_a = [1, 2, 3, 6, 8, 9, 10, 12, 14, 16, 17, 18]
+    rules_a = {0 : 0, 1 : 1, 2 : 2, 3 : np.nan, 'NaN': np.nan}
+
+    items_b = [4, 5, 7, 11, 13, 15]
+    rules_b = {0 : np.nan, 1 : 0, 2 : 1, 3 : 2, 'NaN': np.nan}
 
     # undoing the customizing of column names (for consistency with NDA)
     df.columns = df.columns.str.replace(f'{filename}_','') #had previously appended filename_ to each variable coming from a file, here removing 
 
-    cols_items = [f'{name}{i}' for i in range(1,n_items+1)]  # returns list of column names
-    df[cols_items] = df[cols_items].replace(rules) # re-codes 
+    cols_items_a = [f'{name}{i}' for i in range(1,len(items_a)+1)]  # returns list of column names
+    df[cols_items_a] = df[cols_items_a].replace(rules_a) # re-codes 
+    
+    cols_items_b = [f'{name}{i}' for i in range(1,len(items_b)+1)]  # returns list of column names
+    df[cols_items_b] = df[cols_items_b].replace(rules_b) # re-codes 
 
     # subscales info
     # subscalename = [['subscalename', ['items numbers'], ['placeholder for cols corresponding to items'], 'n items in subscale', 'min score' (added later), 'max score' (added later)]]
-    subscale_1 = ['fear_inhib', [1, 6, 10, 16, 18], [], 5, [], []] 
-    subscale_2 = ['non_approach', [2, 4, 5, 9, 11, 15], [], 6, [], []]
-    subscale_3 = ['risk_avoid', [7, 8, 13], [], 3, [], []] 
-    subscale_4 = ['shy_sensit', [3, 12, 14, 17], [], 4, [], []] 
+    # subscale_1 = ['fear_inhib', [1, 6, 10, 16, 18], [], 5, [], []] 
+    # subscale_2 = ['non_approach', [2, 4, 5, 9, 11, 15], [], 6, [], []]
+    # subscale_3 = ['risk_avoid', [7, 8, 13], [], 3, [], []] 
+    # subscale_4 = ['shy_sensit', [3, 12, 14, 17], [], 4, [], []] 
     tot = ['tot', list( range(1, n_items+1) ), [], n_items, [], []]
    
-    subscales = [subscale_1, subscale_2, subscale_3, subscale_4, tot]
+    # subscales = [subscale_1, subscale_2, subscale_3, subscale_4, tot]
+    subscales = [tot]
     
     # scoring and reality checks
     for scale in subscales:
@@ -948,95 +957,8 @@ def score_shaps(df, item_level, grab_item_count):
     return df
 
 ## ================================================= ##
-def score_stai(df, item_level, grab_item_count):
-    '''
-    questionnaire: State-Trait Anxiety Inventory (STAI)
-    respondent: child or parent (self reports)
-    2 subscales and 0 total score
-    subscales: state anxiety, trait anxiety
-    total: none
-    fillers items: none
-    reverse scored items parent: [1, 2, 5, 8, 10, 11, 15, 16, 19, 20, 21, 23, 26, 27, 30, 33, 34, 36, 39]
-    reverse scored items child : [1, 2, 5, 8, 10, 11, 15, 16, 19, 20, 21,     26, 27, 30, 33,     36, 39]
-    notes from BANDA1.0_crosswalk.csv: none
-    questionnaire & scoring: https://oml.eular.org/sysModules/obxOML/docs/id_150/State-Trait-Anxiety-Inventory.pdf
-    NDA data dictionary: https://nda.nih.gov/data_structure.html?short_name=stai01
-    NDA & original questionnaire values for Y1 State: 1=Not at all so; 2= Somewhat; 3=Moderately so; 4=Very much so
-    NDA & original questionnaire values for Y2 Trait: 1 = Almost never; 2 = Sometimes; 3 = Often; 4 = Almost always;
-    scoring for reversed items on Y1 State: 4=Not at all so; 3= Somewhat; 2=Moderately so; 1=Very much so
-    scoring for reversed items on Y2 Trait: 4 = Almost never; 3 = Sometimes; 2 = Often; 1 = Almost always;
-    scoring: Higher score is more anxiety
-    '''
-
-    # questionnaire info
-    name = 'stai'
-    filename =f'{name}01'
-    n_items = 40
-
-    reverse_items_parent = ['stai1', 'stai2','stai5','stai_state8_i','stai10', 'stai11', 'stai15', 'stai16', 'stai_state19_i', 'stai20', 'stai21',
-                    'stai_trait3_i','stai26', 'stai27', 'stai30','stai33', 'stai_trait14_i','stai36','stai39' ]
-
-    reverse_items_child = ['stai1', 'stai2','stai5','stai_state8_i','stai10', 'stai11', 'stai15', 'stai16', 'stai_state19_i', 'stai20', 'stai21',
-                    'stai26', 'stai27', 'stai30','stai33','stai36','stai39' ]
-    
-    fillers_items = [ ]
-    rules = {1 : 1, 2 : 2, 3 : 3, 4 : 4, 'NaN': np.nan}
-
-    # undoing the customizing of column names (for consistency with NDA)
-    df.columns = df.columns.str.replace(f'{filename}_','') #had previously appended filename_ to each variable coming from a file, here removing 
-    
-    cols_items = df.columns[df.columns.str.contains(f'{name}')]  # returns list of column names
-    df[cols_items] = df[cols_items].replace(rules) # re-codes 
-
-    # reverse scoring parent
-    for grab_col in reverse_items_parent:
-        df.loc[df.index.get_level_values("respondent").isin(["Parent"]), grab_col]  = max(rules.values()) + 1 - df.loc[df.index.get_level_values("respondent").isin(["Parent"])] # 4 = max value of each item, 1 = constant, then subtracting from original un-reverted 
-        # df[grab_col] = max(rules.values()) + 1 - df[grab_col] # 4 = max value of each item, 1 = constant, then subtracting from original un-reverted scores  
-
-    # reverse scoring child
-    for grab_col in reverse_items_child:
-        df.loc[df.index.get_level_values("respondent").isin(["Child"]), grab_col]  = max(rules.values()) + 1 - df.loc[df.index.get_level_values("respondent").isin(["Child"])] # 4 = max value of each item, 1 = constant, then subtracting from original un-reverted 
-        # df[grab_col] = max(rules.values()) + 1 - df[grab_col] # 4 = max value of each item, 1 = constant, then subtracting from original un-reverted scores  
-          
-        
-    # subscales info
-    # subscalename = [['subscalename', ['items numbers'], ['placeholder for cols corresponding to items'], 'n items in subscale', 'min score' (added later), 'max score' (added later)]]
-    subscale_1 = ['state', ['stai1', 'stai2', 'stai3', 'stai_state4_i','stai5', 'stai6', 'stai7','stai_state8_i',
-                            'stai_state9_i','stai10', 'stai11', 'stai12', 'stai13','stai_state14_i', 'stai15', 
-                            'stai16', 'stai17','stai_state18_i', 'stai_state19_i','stai20'],[], 20, [], []] 
-    subscale_2 = ['trait', ['stai21', 'stai_trait2_i', 'stai_trait3_i', 'stai24', 'stai_trait5_i','stai26', 'stai27',
-                            'stai28', 'stai29','stai30', 'stai_trait11_i', 'stai32', 'stai33','stai_trait14_i', 'stai_trait15_i',
-                            'stai36', 'stai37', 'stai38', 'stai39','stai40', ], [], 20, [], []]
-       
-    subscales = [subscale_1, subscale_2]
-    
-    # scoring and reality checks
-    for scale in subscales:
-        scale[4] = scale[3] * 1  # add min
-        scale[5] = scale[3] * 4  # add max
-        scale[2] = scale[1] # keep for consistency with other functions, but here no need since column names were hardcoded
-        df[f'{name}_{scale[0]}_nan_count'] = df[scale[2]].isna().sum(axis=1) # count and store number of item-level nan answers
-        if grab_item_count == 'yes': 
-            df[f'{name}_{scale[0]}_items_count'] = len(scale[2]) # store theoretical count of items making up the subscale
-        df[f'{name}_{scale[0]}'] = df[scale[2]].sum(axis=1, min_count = 1) # score subscale
-
-        # calculating min/max i) subscale value and ii) the min/max possible score they would have gotten if they had answered the quesionts they had as nans
-        scale_min = (df[f'{name}_{scale[0]}'] + ( df[f'{name}_{scale[0]}_nan_count'] * 1 )).min()
-        scale_max = (df[f'{name}_{scale[0]}'] + ( df[f'{name}_{scale[0]}_nan_count'] * 4 )).max()
-
-        #scale[4] and scale[5] indicate the theoretical ranges; scale_min|_max are actual min and max of data     
-        assert (scale_min >= scale[4]) and (scale_max <= scale[5]), f'Watch out: values for subscale {name}_{scale[0]} are outside of theoretical range for some participants. Values should be between {scale[4]} and {scale[5]} but are between {scale_min} and {scale_max} instead'
-
-        # check that overall number of items grabbed is correct
-        n_items_used = [scale[3] for scale in subscales]
-        assert sum(n_items_used) == n_items - len(fillers_items), 'The number of items used to calculate the subscales and total score is either more or less than what was expected'
-
-    # remove item-level columns from original df
-    if item_level == 'drop':
-        df = df.drop(columns = cols_items)
-
-    print(f'Scored {name}')
-    return df
+# def score_stai(df, item_level, grab_item_count):
+# work in progress
 
 ## ================================================= ##
 # score_strain(df, item_level, grab_item_count)
