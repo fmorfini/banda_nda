@@ -877,11 +877,11 @@ def score_rmbi(df, item_level, grab_item_count):
 
         # check that overall number of items grabbed is correct
         n_items_used = [scale[3] for scale in subscales]
-        assert sum(n_items_used) == 2*n_items - len(fillers_items), 'The number of items used to calculate the subscales and total score is either more or less than what was expected' #note: doing 2* because subscales includes the total subscale too, which here corresponds to the sum of all items
+        assert sum(n_items_used) == n_items - len(fillers_items), 'The number of items used to calculate the subscales and total score is either more or less than what was expected' #note: doing 2* because subscales includes the total subscale too, which here corresponds to the sum of all items
 
     # remove item-level columns from original df
     if item_level == 'drop':
-        df = df.drop(columns = cols_items)
+        df = df.drop(columns = cols_items_a + cols_items_b)
     
     print(f'scored {name}')
     return df
