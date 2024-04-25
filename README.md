@@ -1,5 +1,5 @@
 # BANDA NDA data scoring repository
-This repository contains scripts to combine and score behavioral data from the `BANDAImgManifestBeh` NDA package for the [BANDA project](https://nda.nih.gov/edit_collection.html?id=3037) (Boston Adolescent Neuroimaging of Depression and Anxiety), sometimes referred to as Human Connectome Project Related to Disease (HCP) or HCP for Anxiety and Depression in Adolescence.
+This repository contains scripts to combine and score behavioral data from the `BANDAImgManifestBeh` NDA package v1.0 for the [BANDA project](https://nda.nih.gov/edit_collection.html?id=3037) (Boston Adolescent Neuroimaging of Depression and Anxiety), sometimes referred to as Human Connectome Project Related to Disease (HCP) or HCP for Anxiety and Depression in Adolescence.
 
 ## Scripts info
 - inputs: `BANDAImgManifestBeh/*txt` files include demographic, behavioral, and cognitive data. Most of these data are item-level/raw, but some already aggregated (e.g., PEN and NIHToolbox). These data need to be downloaded directly from NDA
