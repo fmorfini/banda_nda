@@ -44,7 +44,7 @@ This repository contains scripts to combine and score behavioral data from the `
 
 ## Papers 
 ### Protocols and Data Release Papers
-Hubbard et al. (2020) Scientific Data: https://doi.org/10.1038/s41597-024-03629-x \
+Hubbard et al. (2024) Scientific Data: https://doi.org/10.1038/s41597-024-03629-x \
 Hubbard et al. (2020) NeuroImage Clinical: https://doi.org/10.1016/j.nicl.2020.102240 \
 Siless et al. (2020) NeuroImage Clinical: https://doi.org/10.1016/j.nicl.2020.102242 
 
